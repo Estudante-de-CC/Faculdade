@@ -19,20 +19,17 @@ class grafo:
             case 'b':
                 if(self.qtd_brigadas < 3):
                     c = v.caminhao(r.random())
-                    V = v.brigada(c, r.randint(3, 5))
-                    V.nome = f"B: {len(self.vertices)}"
+                    V = v.brigada(tipo = "b", nome = f"B: {len(self.vertices)}", caminhao = c)
                     self.qtd_brigadas += 1
                     return V
                 else: 
                     print("Já existem brigadas demais - Uma delas foi removida!")
                     return None
             case 'v':
-                V = v.vegetacao()
-                V.nome = f"V: {len(self.vertices)}"
+                V = v.vegetacao(tipo = 'v', nome = f"V: {len(self.vertices)}")
                 return V
             case 'c': 
-                V = v.coleta()
-                V.nome = f"C: {len(self.vertices)}"
+                V = v.coleta(tipo = 'c', nome = f"C: {len(self.vertices)}")
                 return V
             
             case _: 

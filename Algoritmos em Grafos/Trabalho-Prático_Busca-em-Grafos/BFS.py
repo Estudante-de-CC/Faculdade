@@ -18,6 +18,7 @@ def bfs(G, pos):
 
     while(Q.qsize() != 0): 
         u = Q.get()
+        print(type(u))
         l = G.listas_adj[G.vertices.index(u)].raiz
         while (l != None): 
             if (l.ver.cor_p == "Branco"):

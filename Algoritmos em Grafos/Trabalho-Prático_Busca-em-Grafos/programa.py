@@ -35,9 +35,8 @@ def insere_arb(G):
     G.adc_lista_adj(12, 6, 9)
 
     BFS.bfs(G, 0)
-    G.vertices[14].dist
 
-    ## Agora inserindo as arestas
+    ##Agora inserindo as arestas
     
             
 

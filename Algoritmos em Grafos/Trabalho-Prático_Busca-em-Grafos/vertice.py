@@ -5,7 +5,6 @@ class vertice:
     def __init__(self, tipo: chr, nome: str): 
         self.tipo = tipo
         self.nome = nome
-        ### Para os algoritmos de busca: 
         self.dist = None
         self.pai = None
         self.cor_p = None
@@ -30,13 +29,14 @@ class caminhao:
 
 
 class brigada(vertice): 
-    def __init__(self, caminhao: caminhao, qtd: int): 
+    def __init__(self,tipo: chr, nome: str, caminhao: caminhao):
+        super().__init__(tipo, nome)
         self.caminhao = caminhao
-        self.qtd = qtd
         self.color = "red"
 
 class vegetacao(vertice):
-    def __init__(self):
+    def __init__(self,tipo: chr, nome: str):
+        super().__init__(tipo, nome)
         self.fogo: bool
         self.tempo = None
         self.color = "green"
@@ -45,5 +45,6 @@ class vegetacao(vertice):
         self.color = "black"
 
 class coleta(vertice): 
-    def __init__(self):
+    def __init__(self,tipo: chr, nome: str):
+        super().__init__(tipo, nome)
         self.color = "blue"
