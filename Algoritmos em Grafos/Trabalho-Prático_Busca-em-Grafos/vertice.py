@@ -1,9 +1,13 @@
 ##Classes básicas relacionadas aos vértices usadas dentro do programa geral.
 
+from math import inf
 class vertice: 
     def __init__(self, tipo: chr, nome: str): 
         self.tipo = tipo
         self.nome = nome
+        ### Para os algoritmos de busca: 
+        self.dist = None
+        self.pai = None
         self.cor_p = None
 
 class caminhao:

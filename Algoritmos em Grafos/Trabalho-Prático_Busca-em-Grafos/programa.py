@@ -2,6 +2,7 @@ import parse as par
 import grafos as gr
 import desenhar as des
 import random as rand
+import BFS
 
 def insere_arb(G): 
     ## Quero tornar o insert fixo para evitar problemas futuros.
@@ -32,6 +33,9 @@ def insere_arb(G):
     G.adc_lista_adj(0, 12, 9)
     G.adc_lista_adj(3, 12, 4)
     G.adc_lista_adj(12, 6, 9)
+
+    BFS.bfs(G, 0)
+    G.vertices[14].dist
 
     ## Agora inserindo as arestas
     
