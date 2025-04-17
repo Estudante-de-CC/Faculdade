@@ -20,7 +20,7 @@ class grafo:
                 if(self.qtd_brigadas < 3):
                     c = v.caminhao(r.random())
                     V = v.brigada(c, r.randint(3, 5))
-                    V.nome = f"B: {r.randint(1, 12)}"
+                    V.nome = f"B: {len(self.vertices)}"
                     self.qtd_brigadas += 1
                     return V
                 else: 
@@ -28,11 +28,11 @@ class grafo:
                     return None
             case 'v':
                 V = v.vegetacao()
-                V.nome = f"V: {r.randint(1, 6)}"
+                V.nome = f"V: {len(self.vertices)}"
                 return V
             case 'c': 
                 V = v.coleta()
-                V.nome = f"C: {r.randint(1, 20)}"
+                V.nome = f"C: {len(self.vertices)}"
                 return V
             
             case _: 
@@ -46,20 +46,19 @@ class grafo:
         if (V != None):
 
             def compara(K): 
-                if (type(K) == type(V)): 
-                    return True
+                if (type(K) == type(V)): return True
                 else: return False
             
             for i in filter(compara, self.vertices):
                 if i.nome == V.nome: 
                     print("Nome já existe")
                     V = None
-
-        if (V != None):
-            ##Agora para eliminar ocorrêcias repetidas!!!
-            self.listas_adj.append(ar.lista(V))
-            self.vertices.append(V)
-            self.ajusta_matP()
+            
+            if (V != None):
+                ##Agora para eliminar ocorrêcias repetidas!!!
+                self.listas_adj.append(ar.lista(V))
+                self.vertices.append(V)
+                self.ajusta_matP()
 
     def ajusta_matP(self): 
         n = len(self.vertices)
@@ -83,7 +82,9 @@ class grafo:
 
     def adc_lista_adj(self, ind_v: int , ind_adj: int, peso: int):
         self.listas_adj[ind_v].inserir(self.vertices[ind_adj], peso)
+        self.listas_adj[ind_adj].inserir(self.vertices[ind_v], peso)
         self.mat_custos[ind_v] [ind_adj] = peso
+        self.mat_custos[ind_adj] [ind_v] = peso
         self.arestas.append((ind_v, ind_adj))
 
     def listar_Prop(self):

@@ -4,6 +4,7 @@ class vertice:
     def __init__(self, tipo: chr, nome: str): 
         self.tipo = tipo
         self.nome = nome
+        self.cor_p = None
 
 class caminhao:
     def __init__ (self, capacidade: int): 
