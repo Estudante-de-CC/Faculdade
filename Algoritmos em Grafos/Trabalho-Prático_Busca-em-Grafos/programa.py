@@ -47,6 +47,13 @@ def teste():
     ##G.listar_Prop()
     ## Teste de lista de adj: 
     #Inserindo arestas aleatórias -> Está funcionando.
+    BFS.bfs(G, 1)
+    for v in G.vertices:
+        print(v.cor_p)
+        if( v.pi != None):
+            print(v.pi.nome)
+        print(v.d)
+        print()
     
 
     ##Teste de desenho: 

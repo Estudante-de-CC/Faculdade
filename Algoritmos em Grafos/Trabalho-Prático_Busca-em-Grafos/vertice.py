@@ -5,12 +5,16 @@ class vertice:
     def __init__(self, tipo: chr, nome: str): 
         self.tipo = tipo
         self.nome = nome
-        self.dist = None
-        self.pai = None
+        self.d = None
+        self.pi = None
         self.cor_p = None
-        
+
     def dist(self, dist): 
-        self.dist = dist
+        self.d = dist
+    def pai(self, ver): 
+        self.pi = ver
+    def cor(self, cor):
+        self.cor_p = cor
 
 class caminhao:
     def __init__ (self, capacidade: int): 

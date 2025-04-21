@@ -12,7 +12,10 @@ class grafo:
         self.listas_adj = []
         self.focos = []
         self.mat_custos = []
-        self.qtd_brigadas = 0 
+        self.qtd_brigadas = 0
+    
+    def pos_ver(self, ver):
+        return self.vertices[ver]
     
     def cria_ver(self, tipo: chr):
          match tipo: 
