@@ -67,7 +67,6 @@ class grafo:
                 while (len(i) < n):
                     i.append(0)
 
-
     def deleta(self, vertice: v.vertice):
         x = self.vertices.index(vertice)
         self.vertices.pop(x)

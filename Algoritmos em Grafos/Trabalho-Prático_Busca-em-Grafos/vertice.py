@@ -8,6 +8,9 @@ class vertice:
         self.dist = None
         self.pai = None
         self.cor_p = None
+        
+    def dist(self, dist): 
+        self.dist = dist
 
 class caminhao:
     def __init__ (self, capacidade: int): 

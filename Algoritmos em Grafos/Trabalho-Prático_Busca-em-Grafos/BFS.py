@@ -2,6 +2,9 @@ import grafos
 import vertice
 import queue
 from math import inf
+
+def inicializa(G, pos): 
+    pass
  
 def bfs(G, pos): 
     s = G.vertices[pos]

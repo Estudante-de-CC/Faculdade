@@ -34,7 +34,6 @@ def insere_arb(G):
     G.adc_lista_adj(3, 12, 4)
     G.adc_lista_adj(12, 6, 9)
 
-    BFS.bfs(G, 0)
 
     ##Agora inserindo as arestas
     
@@ -45,7 +44,7 @@ def teste():
     G = gr.grafo()
     insere_arb(G)
 
-    G.listar_Prop()
+    ##G.listar_Prop()
     ## Teste de lista de adj: 
     #Inserindo arestas aleatórias -> Está funcionando.
     
