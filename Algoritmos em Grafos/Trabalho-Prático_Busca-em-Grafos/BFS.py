@@ -1,7 +1,6 @@
-import grafos as gr
-import vertice
 import queue
 from math import inf
+
 
 def inicializa(G, ver):
    for v in G.vertices: 

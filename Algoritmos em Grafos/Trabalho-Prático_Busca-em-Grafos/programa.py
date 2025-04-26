@@ -3,6 +3,7 @@ import grafos as gr
 import desenhar as des
 import random as rand
 import BFS
+import Dijkstra as Dj
 
 def insere_arb(G): 
     ## Quero tornar o insert fixo para evitar problemas futuros.
@@ -34,10 +35,15 @@ def insere_arb(G):
     G.adc_lista_adj(3, 12, 4)
     G.adc_lista_adj(12, 6, 9)
 
-
     ##Agora inserindo as arestas
-    
-            
+    ##Nova Modificação - Quero remover os atributos de "pai", "cor" e etc. para colocar em outro lugar.
+
+def exibe_W(G):
+    P = G.mat_custos
+    i = 1
+    for v in P: 
+        print(f"{i} + {v}")
+        i +=1 
 
 
 def teste():
@@ -54,7 +60,10 @@ def teste():
             print(v.pi.nome)
         print(v.d)
         print()
-    
+
+    ##exibe_W(G)
+    print(len(G.vertices))
+    Dj.Dijkstra(G, 1)
 
     ##Teste de desenho: 
     des.desenhar(G)
