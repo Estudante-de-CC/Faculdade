@@ -2,7 +2,7 @@
 import vertice as v
 import linkedlist as ar
 import random as r
-import numpy as np
+from math import inf
 ## Aqui eu preciso definir como fazer a integração de tudo isso certinho...
 
 class grafo:

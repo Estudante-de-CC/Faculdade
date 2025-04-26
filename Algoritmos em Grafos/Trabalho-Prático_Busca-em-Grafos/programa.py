@@ -64,6 +64,15 @@ def teste():
     ##exibe_W(G)
     print(len(G.vertices))
     Dj.Dijkstra(G, 1)
+    for v in G.vertices: 
+        pai = v.pi
+        print(f"{v.nome} - ", end = "")
+        while pai != None: 
+            print(f"{pai.nome} - ", end = "")
+            pai = pai.pi
+        print(f"Distância: {v.d}")
+        print("\n")
+    
 
     ##Teste de desenho: 
     des.desenhar(G)
