@@ -15,6 +15,7 @@ def insere_arb(G):
               G.insere_ver('v')
         else:
               G.insere_ver('c')
+
     G.adc_lista_adj(1, 7, 4)
     G.adc_lista_adj(1, 8, 2)
     G.adc_lista_adj(2, 6, 9)

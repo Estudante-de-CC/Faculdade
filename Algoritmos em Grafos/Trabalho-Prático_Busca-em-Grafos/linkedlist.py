@@ -21,7 +21,16 @@ class lista:
     @property
     def tamanho(self): 
         return self.tam
-     
+    
+    def __len__(self):
+        tam = 0
+        atual = self.raiz
+
+        while atual != None:
+            tam += 1
+            atual = atual.next
+
+        return tam 
 
     def busca(self, x: ver.vertice):
         atual = self.raiz

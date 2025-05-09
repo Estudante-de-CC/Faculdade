@@ -36,17 +36,31 @@ class caminhao:
 
 
 class brigada(vertice): 
-    def __init__(self,tipo: chr, nome: str, caminhao: caminhao):
+    def __init__(self,tipo: chr, nome: str):
         super().__init__(tipo, nome)
-        self.caminhao = caminhao
+        self.caminhoes = []
+        self.qtdEquipes = 0
         self.color = "red"
+
+    def add_caminhoes(self, caminhoes: list):
+            
+        for veiculo in caminhoes:
+            if(isinstance(veiculo, caminhao)):
+                self.caminhoes.append(veiculo)
+            else:
+                print("caminhoes comporta apenas objetos do tipo caminhao")
+    
+    def add_equipes(self, qtd: int):
+        self.qtdEquipes = qtd
+
 
 class vegetacao(vertice):
     def __init__(self,tipo: chr, nome: str):
         super().__init__(tipo, nome)
-        self.fogo: bool
+        self.fogo = False
         self.tempo = None
         self.color = "green"
+        self.qtdVizinhosIncendiados = 0
     
     def queimou(self):
         self.color = "black"

@@ -21,8 +21,7 @@ class grafo:
          match tipo: 
             case 'b':
                 if(self.qtd_brigadas < 3):
-                    c = v.caminhao(r.random())
-                    V = v.brigada(tipo = "b", nome = f"B: {len(self.vertices)}", caminhao = c)
+                    V = v.brigada(tipo = "b", nome = f"B: {len(self.vertices)}")
                     self.qtd_brigadas += 1
                     return V
                 else: 
