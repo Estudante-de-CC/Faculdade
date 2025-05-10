@@ -54,8 +54,10 @@ probIncendio = 0.5
 
 def bfsMod(G):
 
-   #itera por todos os focos atuais (vértices incendiados remanescentes)
-   for foco in G.focos:
+
+   #itera por uma cópia da lista de focos atuais (vértices incendiados remanescentes) a fim
+   #de evitar perda de elementos iterados em decorrência da remoção dos focos
+   for foco in G.focos[:]:
 
       #incendiado foco atual
       G.vertices[foco].fogo = True
@@ -114,7 +116,7 @@ def bfsMod(G):
 
 
 #tratar questão dos vértices já queimados anteriormente retornando como foco depois [resolvido]
-#verificar por que certos focos são pulados nos prints das iterações
+#verificar por que certos focos são pulados nos prints das  [resolvido]
 
 
 
