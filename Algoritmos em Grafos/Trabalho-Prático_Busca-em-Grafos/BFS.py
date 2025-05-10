@@ -55,24 +55,23 @@ probIncendio = 0.5
 def bfsMod(G):
 
    #itera por todos os focos atuais (vértices incendiados remanescentes)
-   for i, foco in enumerate(G.focos):
+   for foco in G.focos:
 
-      #remove foco da lista geral se ele já tiver sido completamente queimado
-      if(G.vertices[foco].color == "black" or G.vertices[foco].qtdVizinhosIncendiados == len(G.listas_adj[foco]) ):
-         G.focos.remove(foco)
-         continue
+      #incendiado foco atual
+      G.vertices[foco].fogo = True
       
       #acessa lista de adjacência do foco atual
       adj = G.listas_adj[foco].raiz.next
 
-      print(f"foco atual: {G.vertices[foco].nome}:")
+      print(f"foco atual: {G.vertices[foco].nome}, fogo -> {G.vertices[foco].fogo}")
+      print(f"qtd material inflamável: {G.vertices[foco].qtdMaterialInflamavel}")
       print(f"qtd vizinhos: {len(G.listas_adj[foco])}; incendiados: {G.vertices[foco].qtdVizinhosIncendiados}")
 
       #itera por todos os vizinhos do foco analisado
       while(adj != None):
 
          #verifica se vizinho visitado através do foco atual é vegetação, e ainda não foi incendiado
-         if(adj.ver.tipo == "v" and adj.ver.fogo == False):
+         if(adj.ver.tipo == "v" and G.vertices[adj.ver.pos].fogo == False):
 
             #verifica se o vizinho já foi "incendiado" anteriormente
             if(G.vertices.index(adj.ver) not in G.focos):
@@ -84,14 +83,38 @@ def bfsMod(G):
 
                #incendeia vizinho e o adiciona aos focos
                if(chanceIncendio == 1):
-                  adj.ver.fogo = True
+                  print(f"adj fogo = {adj.ver.fogo}")
+
+                  G.vertices[adj.ver.pos].fogo = True
+
                   G.focos.append(G.vertices.index(adj.ver))
                   G.vertices[foco].qtdVizinhosIncendiados += 1
                   
                   print(f"propagou para: {adj.ver.nome} \n")
                   print(G.focos)
-            
+   
          #prossegue ao próximo vizinho
          adj = adj.next
+      
+      #decremeta material inflamável de cada foco consumido pelo fogo em cada turno
+      if(G.vertices[foco].qtdMaterialInflamavel > 0):
+
+         #trantando do caso em que qtdMaterialInflamavel < qtdMaterialConsumido
+         if(G.vertices[foco].qtdMaterialInflamavel < 200):
+            qtdMaterialConsumido = G.vertices[foco].qtdMaterialInflamavel
+         else:
+            qtdMaterialConsumido = random.randint(100, 200)
+            
+         G.vertices[foco].qtdMaterialInflamavel -= qtdMaterialConsumido
+
+      #removendo foco caso seu material inflamável tenha se esgotado
+      if(G.vertices[foco].qtdMaterialInflamavel == 0):
+         G.vertices[foco].queimou()
+         G.focos.remove(foco)
+
+
+#tratar questão dos vértices já queimados anteriormente retornando como foco depois [resolvido]
+#verificar por que certos focos são pulados nos prints das iterações
+
 
 

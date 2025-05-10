@@ -2,9 +2,10 @@
 
 from math import inf
 class vertice: 
-    def __init__(self, tipo: chr, nome: str): 
+    def __init__(self, tipo: chr, nome: str, pos: int): 
         self.tipo = tipo
         self.nome = nome
+        self.pos = pos
         self.d = None
         self.pi = None
         self.cor_p = None
@@ -36,8 +37,8 @@ class caminhao:
 
 
 class brigada(vertice): 
-    def __init__(self,tipo: chr, nome: str):
-        super().__init__(tipo, nome)
+    def __init__(self,tipo: chr, nome: str, pos: int):
+        super().__init__(tipo, nome, pos)
         self.caminhoes = []
         self.qtdEquipes = 0
         self.color = "red"
@@ -55,17 +56,18 @@ class brigada(vertice):
 
 
 class vegetacao(vertice):
-    def __init__(self,tipo: chr, nome: str):
-        super().__init__(tipo, nome)
+    def __init__(self,tipo: chr, nome: str, pos: int):
+        super().__init__(tipo, nome, pos)
         self.fogo = False
         self.tempo = None
         self.color = "green"
+        self.qtdMaterialInflamavel = 0
         self.qtdVizinhosIncendiados = 0
     
     def queimou(self):
         self.color = "black"
 
 class coleta(vertice): 
-    def __init__(self,tipo: chr, nome: str):
-        super().__init__(tipo, nome)
+    def __init__(self,tipo: chr, nome: str, pos: int):
+        super().__init__(tipo, nome, pos)
         self.color = "blue"

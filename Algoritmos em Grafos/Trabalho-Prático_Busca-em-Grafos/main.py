@@ -13,4 +13,8 @@ while Grafo.focos:
 
     print(f"\nno tempo {tempo}:")
     BFS.bfsMod(Grafo)
+    
     tempo += 1
+
+
+    

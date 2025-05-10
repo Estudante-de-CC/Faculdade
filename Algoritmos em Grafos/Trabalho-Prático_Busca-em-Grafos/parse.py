@@ -1,6 +1,7 @@
 #Leitura do arquivo com os parâmetros para execução do programa
 import grafos as gf
 import vertice as ver
+import random
 
 def obterDados():
 
@@ -139,15 +140,27 @@ def obterDados():
                     print(f"incêndio inicia em: {G.focos[0]}")
 
                     print("origem do incêndio inicializado \n")
+
+                    #gerando material inflamável para os vértices de vegetação criados
+
+                    #qtdMaterial inflamável atribuida aleatoriamente com base em limites
+                    #superior e inferior projetados com base no min e max de turnos desejados
+                    minTurnos = 1
+                    maxTurnos = 3
+
+                    limiteSuperior = capacidade_caminhao // minTurnos
+                    limiteInferior = capacidade_caminhao // maxTurnos
+
+                    for vertice in G.vertices:
+                        if(vertice.tipo == "v"):
+                            vertice.qtdMaterialInflamavel = random.randint(limiteInferior, limiteSuperior)
+                            print(f"{vertice.nome} -> qtdMaterial: {vertice.qtdMaterialInflamavel}")
+
                 
                 else:
                     i+=1
-
-                #depois gerar quantidade de material inflamável aleatóri para vértice "v"
             
             else:
                 i+=1
     
     return G
-
-obterDados()

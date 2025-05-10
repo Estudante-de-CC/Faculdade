@@ -21,17 +21,17 @@ class grafo:
          match tipo: 
             case 'b':
                 if(self.qtd_brigadas < 3):
-                    V = v.brigada(tipo = "b", nome = f"B: {len(self.vertices)}")
+                    V = v.brigada(tipo = "b", nome = f"B: {len(self.vertices)}", pos = len(self.vertices))
                     self.qtd_brigadas += 1
                     return V
                 else: 
                     print("Já existem brigadas demais - Uma delas foi removida!")
                     return None
             case 'v':
-                V = v.vegetacao(tipo = 'v', nome = f"V: {len(self.vertices)}")
+                V = v.vegetacao(tipo = 'v', nome = f"V: {len(self.vertices)}", pos = len(self.vertices))
                 return V
             case 'c': 
-                V = v.coleta(tipo = 'c', nome = f"C: {len(self.vertices)}")
+                V = v.coleta(tipo = 'c', nome = f"C: {len(self.vertices)}", pos = len(self.vertices))
                 return V
             
             case _: 
