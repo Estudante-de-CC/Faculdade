@@ -49,24 +49,16 @@ def teste():
     G = gr.grafo()
     insere_arb(G)
 
-    vetor = BFS.bfs(G, 1)
-    print(BFS.bfs(G, 1) [0])
-    print(BFS.bfs(G, 1) [1])
-    
-    ##exibe_W(G)
-    #print(len(G.vertices))
-    #Dj.Dijkstra(G, 1)
-    #for v in G.vertices: 
-    #    pai = v.pi
-    #    print(f"{v.nome} - ", end = "")
-    #    while pai != None: 
-    #        print(f"{pai.nome} - ", end = "")
-    #        pai = pai.pi
-    #    print(f"Distância: {v.d}")
-    #   print("\n")
-    
+    vetorBFS = BFS.bfs(G, 1)
+    print(vetorBFS[0])
+    print(vetorBFS[1])
 
-    ##Teste de desenho: 
+    print()
+
+    vetorDij = Dj.Dijkstra(G, 1)
+    print(vetorDij[0])
+    print(vetorDij[1])
+   
     des.desenhar(G)
 
 

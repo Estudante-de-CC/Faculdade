@@ -31,13 +31,14 @@ class heap:
         subir(self, self.ultima())
 
     def corrigir(self, ver, antiga, nova):
-        i = self.vetores[ver.nome]
-        self.ordem[i].prio = nova
-        if antiga > nova:
-            subir(self, i)
-        else: 
-            descer(self, i)
-        
+        if ver.nome in self.vetores.keys():
+            i = self.vetores[ver.nome]
+            self.ordem[i].prio = nova
+            if antiga > nova:
+                subir(self, i)
+            else: 
+                descer(self, i)
+
 
     def remover(self):
         if (len(self.ordem) > 0):

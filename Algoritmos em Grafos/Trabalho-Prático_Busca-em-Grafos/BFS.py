@@ -2,6 +2,9 @@ import queue
 import random
 from math import inf
 
+## LEGENDA -> 0 = PAI/CAMINHO
+##         -> 1 = DISTÂNCIA EM SALTOS
+##         -> 2 = COLORAÇÃO DO VÉRTICE
 
 def inicializa(G, ver):
    resultado = [[], [], []]
