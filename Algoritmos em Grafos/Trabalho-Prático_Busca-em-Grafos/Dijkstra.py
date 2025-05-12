@@ -28,7 +28,7 @@ def relaxamento(G, H, u, v):
         H.corrigir(u, aux, u.d)
 
 def exibir_H(H):
-    for v in H.ordem: 
+    for v in H.ordem:
         print(f"{v.ver.nome} - {v.prio}")
 
 def Dijkstra(G, s):
@@ -42,8 +42,7 @@ def Dijkstra(G, s):
         while (adj != None):
             relaxamento(G, H, adj.ver, u)
             adj = adj.next
-        #exibir_H(H)
-        #print("_____________________________________________")
+        
     
 
 

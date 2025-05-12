@@ -4,37 +4,44 @@ from math import inf
 
 
 def inicializa(G, ver):
-   for v in G.vertices: 
-      if(v != ver): 
-         v.cor("Branco")
-         v.dist(inf)
-         v.pai(None)
+   resultado = [[], [], []]
+   for v in G.vertices:
+      resultado[0].append(None)
+      resultado[1].append(inf)
+      resultado[2].append("Branco")
 
    ver.pai(None)
    ver.d = 0
    ver.cor("Cinza")
-
+   resultado[1][G.vertices.index(ver)] = 0
+   resultado[2][G.vertices.index(ver)] = "Cinza"
+   return resultado
 
 def bfs(G , pos):
    s = G.pos_ver(pos)
-   inicializa(G, s)
+   resultado = inicializa(G, s)
    Q = queue.Queue()
    Q.put(s)
 
    while (not(Q.empty())):
-        u = Q.get()
-        adj = G.listas_adj[G.vertices.index(u)].raiz
+         u = Q.get()
+         adj = G.listas_adj[G.vertices.index(u)].raiz
 
-        while (adj != None):
-           if (adj.ver.cor_p == "Branco"):
-              adj.ver.cor("Cinza")
-              adj.ver.dist(u.d + 1)
-              adj.ver.pai(u)
-              Q.put(adj.ver)
-           adj = adj.next
-        u.cor("Preto")
+         while (adj != None):
+            if (resultado[2][G.vertices.index(adj.ver)]== "Branco"):
+               resultado[0][G.vertices.index(adj.ver)] = G.vertices.index(u)
+               resultado[1][G.vertices.index(adj.ver)] = resultado[1][G.vertices.index(u)] + 1
+               resultado[2][G.vertices.index(adj.ver)] = "Cinza"
+               Q.put(adj.ver)
+            adj = adj.next
+         resultado[2][G.vertices.index(u)] = "Preto"
+         u.cor("Preto")
+   return resultado
 
-#modificar BFS para não se executado continuamente até todos os vértices serem marcados de preto
+
+
+
+#modificar BFS para não ser executado continuamente até todos os vértices serem marcados de preto
 #mas sim para apenas iterar por todos os vizinhos de um dado vértice decidindo via probailidade fixa
 #para cada vizinho se o mesmo vai ser incendiado
 

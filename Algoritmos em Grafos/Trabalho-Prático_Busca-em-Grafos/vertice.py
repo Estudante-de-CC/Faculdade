@@ -1,6 +1,6 @@
 ##Classes básicas relacionadas aos vértices usadas dentro do programa geral.
-
 from math import inf
+
 class vertice: 
     def __init__(self, tipo: chr, nome: str, pos: int): 
         self.tipo = tipo

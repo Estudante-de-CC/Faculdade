@@ -1,7 +1,5 @@
-import parse as par
 import grafos as gr
 import desenhar as des
-import random as rand
 import BFS
 import Dijkstra as Dj
 
@@ -51,28 +49,21 @@ def teste():
     G = gr.grafo()
     insere_arb(G)
 
-    ##G.listar_Prop()
-    ## Teste de lista de adj: 
-    #Inserindo arestas aleatórias -> Está funcionando.
-    BFS.bfs(G, 1)
-    for v in G.vertices:
-        print(v.cor_p)
-        if( v.pi != None):
-            print(v.pi.nome)
-        print(v.d)
-        print()
-
+    vetor = BFS.bfs(G, 1)
+    print(BFS.bfs(G, 1) [0])
+    print(BFS.bfs(G, 1) [1])
+    
     ##exibe_W(G)
-    print(len(G.vertices))
-    Dj.Dijkstra(G, 1)
-    for v in G.vertices: 
-        pai = v.pi
-        print(f"{v.nome} - ", end = "")
-        while pai != None: 
-            print(f"{pai.nome} - ", end = "")
-            pai = pai.pi
-        print(f"Distância: {v.d}")
-        print("\n")
+    #print(len(G.vertices))
+    #Dj.Dijkstra(G, 1)
+    #for v in G.vertices: 
+    #    pai = v.pi
+    #    print(f"{v.nome} - ", end = "")
+    #    while pai != None: 
+    #        print(f"{pai.nome} - ", end = "")
+    #        pai = pai.pi
+    #    print(f"Distância: {v.d}")
+    #   print("\n")
     
 
     ##Teste de desenho: 
