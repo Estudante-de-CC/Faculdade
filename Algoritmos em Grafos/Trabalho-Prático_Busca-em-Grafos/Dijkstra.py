@@ -4,6 +4,7 @@ from math import inf
 ## LEGENDA -> 0 = PAI/CAMINHO
 ##         -> 1 = DISTÂNCIA EM SALTOS
 
+
 def inicializar(G, ver):
     resultado = [[], []]
     for v in G.vertices:

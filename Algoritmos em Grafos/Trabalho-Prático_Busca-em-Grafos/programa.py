@@ -2,6 +2,7 @@ import grafos as gr
 import desenhar as des
 import BFS
 import Dijkstra as Dj
+import Brigadas as Brigs
 
 def insere_arb(G): 
     ## Quero tornar o insert fixo para evitar problemas futuros.
@@ -49,6 +50,7 @@ def teste():
     G = gr.grafo()
     insere_arb(G)
 
+    print("Resultado de uma execução do algoritmo de BFS:")
     vetorBFS = BFS.bfs(G, 1)
     print(vetorBFS[0])
     print(vetorBFS[1])
@@ -56,8 +58,13 @@ def teste():
     print()
 
     vetorDij = Dj.Dijkstra(G, 1)
+    print("Resultado de uma execução do algoritmo de Dijkstra:")
     print(vetorDij[0])
     print(vetorDij[1])
+    
+    print()
+
+    print("Caminho até o vértice: " + str(Brigs.caminho(G, 1, 12)))
    
     des.desenhar(G)
 

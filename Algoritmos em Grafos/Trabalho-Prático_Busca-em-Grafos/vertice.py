@@ -6,8 +6,6 @@ class vertice:
         self.tipo = tipo
         self.nome = nome
         self.pos = pos
-        self.d = None
-        self.pi = None
         self.cor_p = None
 
     def dist(self, dist): 
