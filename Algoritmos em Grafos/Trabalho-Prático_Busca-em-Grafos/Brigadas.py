@@ -33,20 +33,41 @@ def caminho(G, inicio, objetivo, pais = None):
     if pais == None:
         pais = dj.Dijkstra(G, inicio)
     retorno = []
+    custo  = pais[1][objetivo]
     retorno.append(objetivo)
     while pais[0][objetivo] != None: 
         retorno.append(pais[0][objetivo])
         objetivo = pais[0][objetivo]
-    
+    print("Custo do caminho: " + str(custo))
     retorno.reverse()
     return retorno
 
-def escolha(G, inicio):
-    pass
 
+'''Para essa parte de escolher os vetores, eu preciso pegar apenas os vetores de foco de incêndio, mas entra um problema
+        Como fazer essa seleção de modo eficiente? E outra, preciso iterar por eles e pegar o de menor distância...
+        Então, vou pegar os índices, analisar a matriz de distâncias de Dijkstra, coloco as distâncias todas em uma nova e pego a menor...
+        O
+'''
+#Essa função deve escolher, entre os vetores que estão pegando fogo, o menor deles.
+# Tá funcionando, aparentemente... 
+# Se for pra retornar o caminho: 
+def escolha(G, inicio, pais = None):
+    pais = dj.Dijkstra(G, inicio)
+    selecionar = []
+    for v in G.focos:
+        dist = pais[1][v]
+        selecionar.append((v,dist)) 
+    print(selecionar)
+    if(selecionar != []):
+        min(selecionar, key=lambda x : x[1])
+        return(caminho(G, inicio,  min(selecionar, key=lambda x : x[1])[0]))
+    else:
+        return None
     
 
 '''Implementando -> 4: Avançando de vértice em vértice até alcançar o caminho
 '''
 def proximo(): 
     pass
+
+'''Fora movimentação, preciso de uma função para apagar o fogo também. Que, sinceramente, é a mais simples de se implementar.'''

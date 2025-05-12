@@ -66,7 +66,7 @@ def teste():
 
     print("Caminho até o vértice: " + str(Brigs.caminho(G, 1, 12)))
    
-    des.desenhar(G)
+    #des.desenhar(G)
 
 
 

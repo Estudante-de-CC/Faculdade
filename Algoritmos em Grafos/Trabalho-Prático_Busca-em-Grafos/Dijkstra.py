@@ -56,6 +56,3 @@ def Dijkstra(G, s):
         
     return resultado
         
-    
-
-

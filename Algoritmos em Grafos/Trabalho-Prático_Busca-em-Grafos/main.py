@@ -1,5 +1,6 @@
 import parse
 import BFS
+import Brigadas
 
 #inicializando grafo
 Grafo = parse.obterDados()
@@ -13,6 +14,7 @@ while Grafo.focos:
 
     print(f"\nno tempo {tempo}:")
     BFS.bfsMod(Grafo)
+    print(Brigadas.escolha(Grafo, 1))
     
     tempo += 1
 
