@@ -77,6 +77,7 @@ def obterDados():
                         peso = int(entrada2[1])
                         G.adc_lista_adj(verticeIncial, verticeAdj, peso)
 
+
                         i+=1
                     
                     G.listar_Prop()
@@ -155,6 +156,11 @@ def obterDados():
                         if(vertice.tipo == "v"):
                             vertice.qtdMaterialInflamavel = random.randint(limiteInferior, limiteSuperior)
                             print(f"{vertice.nome} -> qtdMaterial: {vertice.qtdMaterialInflamavel}")
+
+                    #contabilizando vertices de vegetação
+                    for vertice in G.vertices:
+                            if vertice.tipo == "v":
+                                G.vertices[vertice.pos].contabilizarVegetacao(G)
 
                 
                 else:

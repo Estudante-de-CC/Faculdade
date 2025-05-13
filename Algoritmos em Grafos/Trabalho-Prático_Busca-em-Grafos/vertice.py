@@ -1,6 +1,7 @@
 ##Classes básicas relacionadas aos vértices usadas dentro do programa geral.
 
 from math import inf
+
 class vertice: 
     def __init__(self, tipo: chr, nome: str, pos: int): 
         self.tipo = tipo
@@ -9,6 +10,7 @@ class vertice:
         self.d = None
         self.pi = None
         self.cor_p = None
+        self.explorados = 0
 
     def dist(self, dist): 
         self.d = dist
@@ -22,9 +24,17 @@ class caminhao:
         self.capacidade = capacidade
         self.a_atual = None
         self.posicao = None
+        self.status = "disponivel"
+        self.caminhoAoFoco = []
 
     def n_pos(self, v: vertice):
         self.posicao = v
+
+    def alterarStatus(self, status: chr):
+        statusDisponiveis = ['disponivel', 'em_missao', 'em_reabastecimento']
+
+        if(status in statusDisponiveis):
+            self.status = status
 
     def abastecer(self): 
         self.a_atual = self.capacidade
@@ -63,9 +73,20 @@ class vegetacao(vertice):
         self.color = "green"
         self.qtdMaterialInflamavel = 0
         self.qtdVizinhosIncendiados = 0
+        self.qtdVizinhosVegetacao = 0
     
     def queimou(self):
         self.color = "black"
+
+    def contabilizarVegetacao(self, G):
+        
+        adj_temp = G.listas_adj[self.pos].raiz.next
+
+        while adj_temp is not None:
+            if adj_temp.ver.tipo == "v":
+                self.qtdVizinhosVegetacao += 1
+        
+            adj_temp = adj_temp.next
 
 class coleta(vertice): 
     def __init__(self,tipo: chr, nome: str, pos: int):

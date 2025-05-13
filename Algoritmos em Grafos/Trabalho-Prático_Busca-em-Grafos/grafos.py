@@ -13,6 +13,7 @@ class grafo:
         self.focos = []
         self.mat_custos = []
         self.qtd_brigadas = 0
+        self.focosAtendidos = []
     
     def pos_ver(self, ver):
         return self.vertices[ver]

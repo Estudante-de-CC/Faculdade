@@ -54,9 +54,9 @@ probIncendio = 0.5
 
 def bfsMod(G):
 
-
    #itera por uma cópia da lista de focos atuais (vértices incendiados remanescentes) a fim
    #de evitar perda de elementos iterados em decorrência da remoção dos focos
+
    for foco in G.focos[:]:
 
       #incendiado foco atual
@@ -69,34 +69,47 @@ def bfsMod(G):
       print(f"qtd material inflamável: {G.vertices[foco].qtdMaterialInflamavel}")
       print(f"qtd vizinhos: {len(G.listas_adj[foco])}; incendiados: {G.vertices[foco].qtdVizinhosIncendiados}")
 
-      #itera por todos os vizinhos do foco analisado
-      while(adj != None):
+      
+      if(G.vertices[foco].explorados < len(G.listas_adj[foco]) - 1):
 
-         #verifica se vizinho visitado através do foco atual é vegetação, e ainda não foi incendiado
-         if(adj.ver.tipo == "v" and G.vertices[adj.ver.pos].fogo == False):
+         G.vertices[foco].explorados = 0
+         
+         #itera por todos os vizinhos do foco analisado
+         while(adj != None):
 
-            #verifica se o vizinho já foi "incendiado" anteriormente
-            if(G.vertices.index(adj.ver) not in G.focos):
+            print(f"explorando {G.vertices[adj.ver.pos].nome}")
 
-               #calcula chance do fogo se propagar ao vizinho visitado
-               chanceIncendio = 1 if random.random() <= probIncendio else 0
+            #verifica se vizinho visitado através do foco atual é vegetação, e ainda não foi incendiado
+            if(adj.ver.tipo == "v" and G.vertices[adj.ver.pos].fogo == False):
 
-               print(f"tentativa para: {adj.ver.nome}; chance -> {chanceIncendio}")
+               #verifica se o vizinho já foi "incendiado" anteriormente
+               if(G.vertices.index(adj.ver) not in G.focos):
 
-               #incendeia vizinho e o adiciona aos focos
-               if(chanceIncendio == 1):
-                  print(f"adj fogo = {adj.ver.fogo}")
+                  #calcula chance do fogo se propagar ao vizinho visitado
+                  chanceIncendio = 1 if random.random() <= probIncendio else 0
 
-                  G.vertices[adj.ver.pos].fogo = True
+                  print(f"tentativa para: {adj.ver.nome}; chance -> {chanceIncendio}")
 
-                  G.focos.append(G.vertices.index(adj.ver))
-                  G.vertices[foco].qtdVizinhosIncendiados += 1
-                  
-                  print(f"propagou para: {adj.ver.nome} \n")
-                  print(G.focos)
-   
-         #prossegue ao próximo vizinho
-         adj = adj.next
+                  #incendeia vizinho e o adiciona aos focos
+                  if(chanceIncendio == 1):
+                     print(f"adj fogo = {adj.ver.fogo}")
+
+                     G.vertices[adj.ver.pos].fogo = True
+
+                     G.focos.append(G.vertices.index(adj.ver))
+                     G.vertices[foco].explorados +=1
+                     #G.vertices[foco].qtdVizinhosIncendiados = 1
+                     
+                     print(f"propagou para: {adj.ver.nome} \n")
+                     print(f"qtd explorado: {G.vertices[foco].explorados}")
+                     print(G.focos)
+
+            elif(adj.ver.tipo != "v" or adj.ver.fogo == True):
+               G.vertices[foco].explorados +=1
+               print(f"qtd explorado: {G.vertices[foco].explorados}")
+      
+            #prossegue ao próximo vizinho
+            adj = adj.next
       
       #decremeta material inflamável de cada foco consumido pelo fogo em cada turno
       if(G.vertices[foco].qtdMaterialInflamavel > 0):
@@ -113,10 +126,6 @@ def bfsMod(G):
       if(G.vertices[foco].qtdMaterialInflamavel == 0):
          G.vertices[foco].queimou()
          G.focos.remove(foco)
-
-
-#tratar questão dos vértices já queimados anteriormente retornando como foco depois [resolvido]
-#verificar por que certos focos são pulados nos prints das  [resolvido]
 
 
 
