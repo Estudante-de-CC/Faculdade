@@ -100,7 +100,7 @@ def obterDados():
                             caminhoes = []
 
                             for j in range(qtd_caminhoes):
-                                cam = ver.caminhao(capacidade_caminhao)
+                                cam = ver.caminhao(capacidade_caminhao, nome = f"B{v.pos}-CAM{j}")
                                 cam.abastecer()
                                 cam.n_pos(v)
 
@@ -124,9 +124,19 @@ def obterDados():
 
                     for vertice in G.vertices:
                         if(vertice.tipo =="b"):
-                            vertice.add_equipes(quantidadeEquipes)
+                            
+                            equipes = []
 
-                            print(f"vertice {vertice.nome} tem {vertice.qtdEquipes} equipes")
+                            for j in range(quantidadeEquipes):
+                                equipe = ver.equipeBrigada(nome = f"B{vertice.pos}-Equipe{j}")
+
+                                equipes.append(equipe)
+                            
+                            vertice.add_equipes(equipes)
+
+                            print(vertice.nome)
+                            for e in vertice.equipes:
+                                print(e)
                     
                     print("equipes de brigadas inicializadas \n")
                     

@@ -67,7 +67,7 @@ def bfsMod(G):
 
       print(f"foco atual: {G.vertices[foco].nome}, fogo -> {G.vertices[foco].fogo}")
       print(f"qtd material inflamável: {G.vertices[foco].qtdMaterialInflamavel}")
-      print(f"qtd vizinhos: {len(G.listas_adj[foco])}; incendiados: {G.vertices[foco].qtdVizinhosIncendiados}")
+      print(f"qtd vizinhos: {len(G.listas_adj[foco])}; qtd incendiados: {G.vertices[foco].qtdVizinhosIncendiados} \n")
 
       
       if(G.vertices[foco].explorados < len(G.listas_adj[foco]) - 1):
@@ -76,7 +76,7 @@ def bfsMod(G):
          
          #itera por todos os vizinhos do foco analisado
          while(adj != None):
-
+            
             print(f"explorando {G.vertices[adj.ver.pos].nome}")
 
             #verifica se vizinho visitado através do foco atual é vegetação, e ainda não foi incendiado
@@ -92,17 +92,16 @@ def bfsMod(G):
 
                   #incendeia vizinho e o adiciona aos focos
                   if(chanceIncendio == 1):
-                     print(f"adj fogo = {adj.ver.fogo}")
 
                      G.vertices[adj.ver.pos].fogo = True
 
                      G.focos.append(G.vertices.index(adj.ver))
                      G.vertices[foco].explorados +=1
-                     #G.vertices[foco].qtdVizinhosIncendiados = 1
+                     G.vertices[foco].qtdVizinhosIncendiados += 1
                      
-                     print(f"propagou para: {adj.ver.nome} \n")
+                     print(f"propagou para: {adj.ver.nome}")
                      print(f"qtd explorado: {G.vertices[foco].explorados}")
-                     print(G.focos)
+                     print(f"foco ativos: {G.focos} \n")
 
             elif(adj.ver.tipo != "v" or adj.ver.fogo == True):
                G.vertices[foco].explorados +=1

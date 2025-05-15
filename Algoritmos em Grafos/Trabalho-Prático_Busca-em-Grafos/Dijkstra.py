@@ -111,6 +111,88 @@ def reconstruirCaminho(G, cam: caminhao, foco: int):
 #se agua atual for >= a materialInflamavel o fogo será apagado por completo
 #senao ainda tenho que decidir qual a alternativa mais lógica
 
+def alocarCaminhaoFoco(G, foco, brigadas):
+    
+    #itera pelas brigadas para verificar disponibilidade de equipes e caminhoes
+    for brigada in brigadas:
+        for equipe in brigada.equipes:
+
+            if(equipe.ocupado == False):
+
+                for caminhao in brigada.caminhoes:
+
+                    if(caminhao.status == "disponivel" and caminhao.a_atual >= G.vertices[foco].qtdMaterialInflamavel):
+
+                        resultado = Dijkstra(G, caminhao.posicao.pos)
+
+                        for i, indicePai in enumerate(resultado[0]):
+                            G.vertices[i].pi = G.vertices[indicePai] if indicePai is not None else None
+
+                        #reconstruindo caminho do caminhao disponível
+                        reconstruirCaminho(G, caminhao, foco)
+
+                        #alterando status da equipe
+                        equipe.ocupado = True
+
+                        #atribuindo equipe ao caminhao dispnível
+                        equipe.caminhao = caminhao
+
+                        print(f"caminhao {caminhao.nome}")
+                        print(f"com equipe {equipe.nome} atribuída")
+                        print(f"em missão ao foco {G.vertices[foco].nome}")
+                        print(f"caminho ao foco: {caminhao.caminhoAoFoco}")
+
+                        #Adicionando foco a lista de atendidos a fim de evitar que o mesmo seja alocado a dois
+                        #ou mais caminhões distintos
+                        G.focosAtendidos.append(foco)
+                        caminhao.alterarStatus("em_missao")
+                        caminhao.focoAtual = foco
+
+                        return True
+    return False
+
+def movimentarCaminhao(G, brigadas, foco):
+    
+    for brigada in brigadas:
+        for caminhao in brigada.caminhoes:
+
+            #se caminhao estiver com status "em missão" e ainda tiver itens em sua
+            #lista de caminho ao foco, removemos o primeiro elemento para simular a
+            #movimentação em 1 vértice a cada turno
+            
+            if((caminhao.status == "em_missao" or caminhao.status == "em_reabastecimento") and caminhao.caminhoAoFoco):
+                posicaoAtual = caminhao.caminhoAoFoco.pop(0)
+                #consertar: tem que passar é o vértice não o índice dele (Int)
+                caminhao.n_pos(G.vertices[posicaoAtual])
+
+                print(f"caminho restante de {caminhao.nome} até {caminhao.focoAtual}: {caminhao.caminhoAoFoco}")
+
+            #lista de caminhos de caminhao em missão está vazia então caminhao chegou ao foco e pode tratá-lo
+            if(caminhao.status == "em_missao" and not caminhao.caminhoAoFoco):
+                caminhao.apagar(G.vertices[caminhao.focoAtual].qtdMaterialInflamavel)
+                caminhao.alterarStatus("disponivel")
+
+                #liberando equipe associada ao caminhao
+                for equipe in brigada.equipes:
+                    if equipe.caminhao == caminhao:
+                        equipe.ocupado = False
+                        equipe.caminhao = None
+
+                #decrementar quantidade de material inflamavel do foco
+                G.vertices[caminhao.focoAtual].qtdMaterialInflamavel = 0
+
+                G.vertices[caminhao.focoAtual].queimou()
+
+                #G.focos.remove(caminhao.focoAtual)
+
+                print(f"{caminhao.nome} apagou {G.vertices[caminhao.focoAtual].nome}")
+
+            #lista de caminhos de caminhao em reabastecimento está vazia então caminhao chegou a coleta e pode reabastecer
+            if(caminhao.status == "em_reabastecimento" and not caminhao.caminhoAoFoco):
+                caminhao.abastecer()
+                caminhao.alterarStatus("disponivel")
+
+
 def acaoBrigadistas(G):
 
     #ordenar focos com base na quantidade de vizinhos que possuem
@@ -122,48 +204,18 @@ def acaoBrigadistas(G):
 
     #iterar por todos os focos ativos naquele turno priorizando os que possuem mais vizinhos
     for foco in focos_ordenados:
-
-        alocado = False
-
         if foco not in G.focosAtendidos:
+            
+            #verificando necessidade de reabastecimento
 
-            #iterar pelas brigadas para verificar a disponibilidade de suas equipes e caminhões
-            for brigada in brigadas:
-                for caminhao in brigada.caminhoes:
-                    
-                    #verifica disponibilidade do caminhão e se sua capacidade é suficiente para apagar o foco
-                    if(caminhao.status == "disponivel" and caminhao.a_atual >= G.vertices[foco].qtdMaterialInflamavel):
+            #alocando caminhao e equipes disponíveis ao foco
+            alocarCaminhaoFoco(G, foco, brigadas)
 
-                        #chama dijkstra para retornar o caminho mais curto enre o caminhao e o foco
-                        resultado = Dijkstra(G, caminhao.posicao.pos)
-
-                        for i, indicePai in enumerate(resultado[0]):
-                            G.vertices[i].pi = G.vertices[indicePai] if indicePai is not None else None
-
-                        #após isso terei a distancia do caminhao disponível em relação a todos os vértices
-
-                        #reconstruindo caminho do caminhao disponível
-                        reconstruirCaminho(G, caminhao, foco)
-
-                        print(f"caminhao {caminhao} da brigada {G.vertices[brigada.pos].nome}")
-                        print(f"em missão ao foco {G.vertices[foco].nome}")
-                        print(f"caminho ao foco: {caminhao.caminhoAoFoco}")
-
-                        #Adicionando foco a lista de atendidos a fim de evitar que o mesmo seja alocado a dois
-                        #ou mais caminhões distintos
-                        G.focosAtendidos.append(foco)
-                        caminhao.alterarStatus("em_missao")
-                        alocado = True
-
-                        break
-
-                if alocado == True:
-                    break
+            #andando vértices no caminho até o foco para caminhões que foram atrbibuidos em missões
+            movimentarCaminhao(G, brigadas, foco)
 
 
-                        #pra simular que o caminhao está andando até o foco posso a cada
-                        #turno remover um elemento de sua lista caminhoAoFoco
-                        #de modo que se a lista estiver vazia ele chegou ao foco e pode apagua-lo
+
 
 
 

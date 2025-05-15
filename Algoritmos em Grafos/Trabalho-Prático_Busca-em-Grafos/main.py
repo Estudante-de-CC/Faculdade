@@ -12,10 +12,12 @@ Grafo.listar_Prop()
 tempo = 0
 while Grafo.focos:
 
-    print(f"\nno tempo {tempo}:")
+    print(f"\nTempo {tempo}:\n")
 
-
+    print("Ação do fogo:")
     BFS.bfsMod(Grafo)
+
+    print("\nAção dos brigadistas")
     Dijkstra.acaoBrigadistas(Grafo)
     
     tempo += 1

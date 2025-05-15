@@ -20,12 +20,14 @@ class vertice:
         self.cor_p = cor
 
 class caminhao:
-    def __init__ (self, capacidade: int): 
+    def __init__ (self, capacidade: int, nome: chr):
+        self.nome = nome 
         self.capacidade = capacidade
         self.a_atual = None
         self.posicao = None
         self.status = "disponivel"
         self.caminhoAoFoco = []
+        self.focoAtual = None
 
     def n_pos(self, v: vertice):
         self.posicao = v
@@ -41,15 +43,26 @@ class caminhao:
 
     def apagar(self, necessario: int):
         if self.a_atual >= necessario: 
-            self.atual -= necessario
+            self.a_atual -= necessario
             return True
         return False
+
+class equipeBrigada:
+    def __init__ (self, nome: chr):
+        self.nome = nome
+        self.caminhao = None
+        self.ocupado = False
+    
+    def atribuirCaminhao(self, cam: caminhao):
+        self.caminhao = cam
+        self.ocupado = True
 
 
 class brigada(vertice): 
     def __init__(self,tipo: chr, nome: str, pos: int):
         super().__init__(tipo, nome, pos)
         self.caminhoes = []
+        self.equipes = []
         self.qtdEquipes = 0
         self.color = "red"
 
@@ -61,8 +74,13 @@ class brigada(vertice):
             else:
                 print("caminhoes comporta apenas objetos do tipo caminhao")
     
-    def add_equipes(self, qtd: int):
-        self.qtdEquipes = qtd
+    def add_equipes(self, equipes: list):
+
+        for equipe in equipes:
+            if(isinstance(equipe, equipeBrigada)):
+                self.equipes.append(equipe)
+            else:
+                print("equipe comporta apenas objetos do tipo equipeBrigada")
 
 
 class vegetacao(vertice):
