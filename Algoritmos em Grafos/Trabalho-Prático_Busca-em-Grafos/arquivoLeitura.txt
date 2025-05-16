@@ -23,6 +23,8 @@
 12,6=9
 14,1=5
 14,12=3
+11,4=5
+4,10=2
 
 #quantidade de caminhoes por posto de brigada e suas capacidades
 3,2500

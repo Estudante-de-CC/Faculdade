@@ -22,5 +22,8 @@ while Grafo.focos:
     
     tempo += 1
 
+if(not Grafo.focos):
+    print("incêndio conclúido")
+
 
     
