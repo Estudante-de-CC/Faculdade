@@ -6,9 +6,7 @@ import Dijkstra
 Grafo = parse.obterDados()
 Grafo.listar_Prop()
 
-#lógica para propagação do fogo
-
-#enquanto houver vértices com incêndio
+#enquanto houver vértices pegando fogo
 tempo = 0
 while Grafo.focos:
 
@@ -23,7 +21,21 @@ while Grafo.focos:
     tempo += 1
 
 if(not Grafo.focos):
-    print("incêndio conclúido")
+    print("incêndio conclúido \n")
+
+    print("Relatório final da simulação: \n")
+
+    if(len(Grafo.focosQueimados) > 0):
+        print(f"tempo total da simualação: {tempo}")
+    else:
+        print(f"tempo necessário para conter fogo: {tempo} unidades de tempo") #[OK]
+
+    print(f"quantidade de vértices totalmente queimados: {len(Grafo.focosQueimados)}") #[OK]
+    print(f"quantidade de vértices salvos: {Grafo.qtdFocosSalvos}") #[OK]
+    print(f"quantidade de equipes mobilizadas: {len(Grafo.equipesMobilizadas)}") #[OK]
+    print(f"quantidade de reabastecimentos efetuados: {Grafo.reabastecimentos}") #[OK] 
+    print(f"quantidade de água gasta: {Grafo.qtdAguaUtilizada}L") #[OK]
+
 
 
     

@@ -14,6 +14,11 @@ class grafo:
         self.mat_custos = []
         self.qtd_brigadas = 0
         self.focosAtendidos = []
+        self.qtdFocosSalvos = 0
+        self.focosQueimados = []
+        self.equipesMobilizadas = []
+        self.qtdAguaUtilizada = 0
+        self.reabastecimentos = 0
     
     def pos_ver(self, ver):
         return self.vertices[ver]

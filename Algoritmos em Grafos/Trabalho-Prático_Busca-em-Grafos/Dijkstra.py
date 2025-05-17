@@ -159,6 +159,10 @@ def alocarCaminhaoFoco(G, foco, brigadas, coletas):
                     #ou mais caminhões distintos
                     G.focosAtendidos.append(foco)
 
+                    #adcionando equipe de caminhao alocado a equipes mobilizadas para fins de registro
+                    if caminhao.equipe not in G.equipesMobilizadas:
+                        G.equipesMobilizadas.append(caminhao.equipe)
+
                     return True
             
             else:
@@ -186,7 +190,7 @@ def alocarCaminhaoFoco(G, foco, brigadas, coletas):
                     print(f"coleta mais próxima: {caminhao.focoAtual}")
                     print(f"caminho restante até coleta {caminhao.caminhoAoFoco}")
                     
-        return False
+    return False
 
 
 def movimentarCaminhao(G, brigadas):
@@ -207,15 +211,21 @@ def movimentarCaminhao(G, brigadas):
                 print(f"caminhao {caminhao.nome} andou 1 vertice em direação a {G.vertices[caminhao.focoAtual].nome}")
                 print(f"caminho restante de {caminhao.nome} até {caminhao.focoAtual}: {caminhao.caminhoAoFoco}")
 
-            #lista de caminhos de caminhao em missão está vazia então caminhao chegou ao foco e pode tratá-lo
+            #lista de caminhos de caminhao em missão está vazia então caminhao chegou ao foco e pode apagá-lo
             if(caminhao.status == "em_missao" and not caminhao.caminhoAoFoco):
                 
                 print(f"qtd água: [{caminhao.a_atual}] > qtd material inflamavel: [{G.vertices[caminhao.focoAtual].qtdMaterialInflamavel}]")
                 
                 caminhao.apagar(G.vertices[caminhao.focoAtual].qtdMaterialInflamavel)
 
-                #decrementar quantidade de material inflamavel do foco
+                #registrando quantidade de água gasta até o momento
+                G.qtdAguaUtilizada += G.vertices[caminhao.focoAtual].qtdMaterialInflamavel
+
+                #decrementando quantidade de material inflamavel do foco
                 G.vertices[caminhao.focoAtual].qtdMaterialInflamavel = 0
+
+                #registrando quantidade de focos salvos
+                G.qtdFocosSalvos += 1
 
                 #atualizando cor do foco atribuído ao caminhao
                 G.vertices[caminhao.focoAtual].queimou()
@@ -232,24 +242,16 @@ def movimentarCaminhao(G, brigadas):
             #lista de caminhos de caminhao em reabastecimento está vazia então caminhao chegou a coleta e pode reabastecer
             if(caminhao.status == "em_reabastecimento" and not caminhao.caminhoAoFoco):
                 caminhao.abastecer()
-                print(f"caminhao {caminhao.nome} reabastecido [{caminhao.a_atual} L], posição {caminhao.posicao.nome}")
 
-                #atribuir nova posição do caminhão ao local que ele reabasteceu
+                #registrando quantidade de reabastecimentos efetuados
+                G.reabastecimentos += 1
+
+                print(f"caminhao {caminhao.nome} reabastecido [{caminhao.a_atual} L], posição {caminhao.posicao.nome}")
 
                 caminhao.alterarStatus("disponivel")
                 caminhao.focoAtual = None
                 caminhao.caminhoAoFoco = []
 
-
-def atualizarStatus(brigadas):
-
-    for brigada in brigadas:
-        for caminhao in brigada.caminhoes:
-
-            if(not caminhao.caminhoAoFoco):
-
-                #liberando caminhao
-                caminhao.alterarStatus("disponivel")
 
 def acaoBrigadistas(G):
 
@@ -262,9 +264,6 @@ def acaoBrigadistas(G):
 
     #filtrar lista de vértices do grafo para apenas aos que são pontos válidos de coleta
     coletas = [v.pos for v in G.vertices if v.tipo == 'b' or v.tipo == 'c']
-
-    #Atualizando disponibilidade das equipes e caminhões
-    atualizarStatus(brigadas)
 
     #andando vértices no caminho até o foco para os caminhões que foram atrbibuidos em missões
     movimentarCaminhao(G, brigadas)

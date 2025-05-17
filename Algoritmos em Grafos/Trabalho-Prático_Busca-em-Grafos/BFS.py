@@ -126,6 +126,7 @@ def bfsMod(G):
       #removendo foco caso seu material inflamável tenha se esgotado
       if(G.vertices[foco].qtdMaterialInflamavel == 0):
          G.vertices[foco].queimou()
+         G.vertices.focosQuaimados.append(foco)
          G.focos.remove(foco)
 
 
