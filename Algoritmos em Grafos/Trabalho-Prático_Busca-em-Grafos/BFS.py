@@ -121,7 +121,7 @@ def bfsMod(G):
             
          G.vertices[foco].qtdMaterialInflamavel -= qtdMaterialConsumido
 
-         print(f"{qtdMaterialConsumido} unidades de material inflamavel consumidas de {G.vertices[foco].nome}")
+         print(f"{qtdMaterialConsumido} unidades de material inflamavel consumidas de {G.vertices[foco].nome} \n")
 
       #removendo foco caso seu material inflamável tenha se esgotado
       if(G.vertices[foco].qtdMaterialInflamavel == 0):

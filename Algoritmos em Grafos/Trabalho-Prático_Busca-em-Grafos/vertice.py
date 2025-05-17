@@ -28,6 +28,7 @@ class caminhao:
         self.status = "disponivel"
         self.caminhoAoFoco = []
         self.focoAtual = None
+        self.equipe = None
 
     def n_pos(self, v: vertice):
         self.posicao = v

@@ -33,4 +33,4 @@
 3
 
 #vertice inicial do incêndio
-14
+2

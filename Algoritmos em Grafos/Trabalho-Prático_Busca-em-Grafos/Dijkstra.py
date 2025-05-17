@@ -111,67 +111,82 @@ def reconstruirCaminho(G, cam: caminhao, foco: int):
 #se agua atual for >= a materialInflamavel o fogo será apagado por completo
 #senao ainda tenho que decidir qual a alternativa mais lógica
 
-def alocarCaminhaoFoco(G, foco, brigadas):
+def verificarAbastecimento(G, caminhao: caminhao):
+
+    for foco in G.focos:
+        if(caminhao.a_atual >= G.vertices[foco].qtdMaterialInflamavel):
+
+            #possui quantidade de água necessária para apagar ao menos um foco
+            return False
+    
+    #não tem água suficiente para apagar nenhum foco, logo precisa reabastecer
+    return True
+
+
+def alocarCaminhaoFoco(G, foco, brigadas, coletas):
     
     #itera pelas brigadas para verificar disponibilidade de equipes e caminhoes
     for brigada in brigadas:
-        for equipe in brigada.equipes:
 
-            if(equipe.ocupado == False):
+        for caminhao in brigada.caminhoes:
 
-                for caminhao in brigada.caminhoes:
+            #obtendo vetor de caminho mínimo
+            resultado = Dijkstra(G, caminhao.posicao.pos)
 
-                    if(caminhao.status == "disponivel" and caminhao.a_atual >= G.vertices[foco].qtdMaterialInflamavel):
+            for i, indicePai in enumerate(resultado[0]):
+                G.vertices[i].pi = G.vertices[indicePai] if indicePai is not None else None
 
-                        #atribuindo foco ao caminhao disponível
-                        caminhao.focoAtual = foco
+            #verificando necessidade de reabastecimento
+            if not verificarAbastecimento(G, caminhao):
+                
+                if(caminhao.status == "disponivel" and caminhao.a_atual >= G.vertices[foco].qtdMaterialInflamavel):
 
-                        #alterando status do caminhao
-                        caminhao.alterarStatus("em_missao")
+                    #atribuindo foco ao caminhao disponível
+                    caminhao.focoAtual = foco
 
-                        #obtendo vetor de caminho mínimo
-                        resultado = Dijkstra(G, caminhao.posicao.pos)
+                    #alterando status do caminhao
+                    caminhao.alterarStatus("em_missao")
 
-                        for i, indicePai in enumerate(resultado[0]):
-                            G.vertices[i].pi = G.vertices[indicePai] if indicePai is not None else None
+                    #reconstruindo caminho do caminhao disponível
+                    reconstruirCaminho(G, caminhao, foco)
 
-                        #reconstruindo caminho do caminhao disponível
-                        reconstruirCaminho(G, caminhao, foco)
+                    print(f"caminhao {caminhao.nome}")
+                    print(f"com equipe {caminhao.equipe.nome} atribuída")
+                    print(f"em missão ao foco {G.vertices[caminhao.focoAtual].nome}")
+                    print(f"caminho ao foco: {caminhao.caminhoAoFoco}")
 
-                        #alterando status da equipe
-                        equipe.ocupado = True
+                    #Adicionando foco a lista de atendidos a fim de evitar que o mesmo seja alocado a dois
+                    #ou mais caminhões distintos
+                    G.focosAtendidos.append(foco)
 
-                        #atribuindo equipe ao caminhao dispnível
-                        equipe.caminhao = caminhao
+                    return True
+            
+            else:
+                
+                if(caminhao.status == "disponivel"):
 
-                        print(f"caminhao {caminhao.nome}")
-                        print(f"com equipe {equipe.nome} atribuída")
-                        print(f"em missão ao foco {G.vertices[caminhao.focoAtual].nome}")
-                        print(f"caminho ao foco: {caminhao.caminhoAoFoco}")
+                    menorDistancia = inf
+                    coletaMaisProxima = 0
 
-                        #Adicionando foco a lista de atendidos a fim de evitar que o mesmo seja alocado a dois
-                        #ou mais caminhões distintos
-                        G.focosAtendidos.append(foco)
-
-                        return True
-    return False
-
-def alocarCaminhaoColeta(G, brigadas, ):
-
-    for foco in G.focos:
-        for brigada in brigadas:
-            for caminhao in brigada.caminhoes:
-
-                #contando a qtd de vezes que a qtd de água de um caminhao é insuficiente para um foco ativo
-                if(caminhao.a_atual < G.vertices[foco].qtdMaterialInflamavel):
-                    qtdInsuficiente = 1
-
-                #se ele for insuficiente para todos os focos ativos então deve reabastecer
-                if(qtdInsuficiente == len(G.focos)):
-
+                    #mudando status de caminhao
                     caminhao.alterarStatus("em_reabastecimento")
 
+                    #iterando por todos os postos váidos de coleta incluíndo as próprias brigadas
+                    for coleta in coletas:
+                        if(resultado[1][coleta] < menorDistancia):
+                            menorDistancia = resultado[1][coleta]
+                            coletaMaisProxima = coleta
 
+                    #atribuindo focoAtual como sendo o ponto mais próximo de coleta encontrado
+                    caminhao.focoAtual = coletaMaisProxima
+                    
+                    reconstruirCaminho(G, caminhao, coletaMaisProxima)
+
+                    print(f"caminhao {caminhao.nome} precisa reabastecer")
+                    print(f"coleta mais próxima: {caminhao.focoAtual}")
+                    print(f"caminho restante até coleta {caminhao.caminhoAoFoco}")
+                    
+        return False
 
 
 def movimentarCaminhao(G, brigadas):
@@ -186,14 +201,14 @@ def movimentarCaminhao(G, brigadas):
             if((caminhao.status == "em_missao" or caminhao.status == "em_reabastecimento") and caminhao.caminhoAoFoco):
                 
                 posicaoAtual = caminhao.caminhoAoFoco.pop(0)
-                #consertar: tem que passar é o vértice não o índice dele (Int)
+
                 caminhao.n_pos(G.vertices[posicaoAtual])
 
-                print(f"caminhao {caminhao.nome} andou 1 vertice em direação a {caminhao.focoAtual}")
+                print(f"caminhao {caminhao.nome} andou 1 vertice em direação a {G.vertices[caminhao.focoAtual].nome}")
                 print(f"caminho restante de {caminhao.nome} até {caminhao.focoAtual}: {caminhao.caminhoAoFoco}")
 
             #lista de caminhos de caminhao em missão está vazia então caminhao chegou ao foco e pode tratá-lo
-            if((caminhao.status == "em_missao" or caminhao.status == "em_reabastecimento") and not caminhao.caminhoAoFoco):
+            if(caminhao.status == "em_missao" and not caminhao.caminhoAoFoco):
                 
                 print(f"qtd água: [{caminhao.a_atual}] > qtd material inflamavel: [{G.vertices[caminhao.focoAtual].qtdMaterialInflamavel}]")
                 
@@ -210,9 +225,20 @@ def movimentarCaminhao(G, brigadas):
 
                 print(f"{caminhao.nome} apagou {G.vertices[caminhao.focoAtual].nome}")
 
+                caminhao.alterarStatus("disponivel")
+                caminhao.focoAtual = None
+                caminhao.caminhoAoFoco = []
+
             #lista de caminhos de caminhao em reabastecimento está vazia então caminhao chegou a coleta e pode reabastecer
             if(caminhao.status == "em_reabastecimento" and not caminhao.caminhoAoFoco):
                 caminhao.abastecer()
+                print(f"caminhao {caminhao.nome} reabastecido [{caminhao.a_atual} L], posição {caminhao.posicao.nome}")
+
+                #atribuir nova posição do caminhão ao local que ele reabasteceu
+
+                caminhao.alterarStatus("disponivel")
+                caminhao.focoAtual = None
+                caminhao.caminhoAoFoco = []
 
 
 def atualizarStatus(brigadas):
@@ -224,12 +250,6 @@ def atualizarStatus(brigadas):
 
                 #liberando caminhao
                 caminhao.alterarStatus("disponivel")
-                
-                #libreando equipe associado ao caminhao
-                for equipe in brigada.equipes:
-                    if equipe.caminhao == caminhao:
-                        equipe.ocupado = False
-                        equipe.caminhao = None
 
 def acaoBrigadistas(G):
 
@@ -241,20 +261,21 @@ def acaoBrigadistas(G):
     brigadas = [v for v in G.vertices if v.tipo == 'b']
 
     #filtrar lista de vértices do grafo para apenas aos que são pontos válidos de coleta
-    coletas = [v for v in G.vertices if v.tipo == 'b' or v.tipo == 'c']
+    coletas = [v.pos for v in G.vertices if v.tipo == 'b' or v.tipo == 'c']
 
     #Atualizando disponibilidade das equipes e caminhões
     atualizarStatus(brigadas)
+
+    #andando vértices no caminho até o foco para os caminhões que foram atrbibuidos em missões
+    movimentarCaminhao(G, brigadas)
 
     #iterar por todos os focos ativos naquele turno priorizando os que possuem mais vizinhos
     for foco in focos_ordenados:
         if foco not in G.focosAtendidos:
 
-            #alocando caminhao e equipes disponíveis ao foco
-            alocarCaminhaoFoco(G, foco, brigadas)
+            #alocando caminhao e equipes disponíveis aos focos ativos
+            alocarCaminhaoFoco(G, foco, brigadas, coletas)
 
-    #andando vértices no caminho até o foco para caminhões que foram atrbibuidos em missões
-    movimentarCaminhao(G, brigadas)
 
 
 

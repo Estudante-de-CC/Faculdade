@@ -127,16 +127,26 @@ def obterDados():
                             
                             equipes = []
 
+                            
                             for j in range(quantidadeEquipes):
                                 equipe = ver.equipeBrigada(nome = f"B{vertice.pos}-Equipe{j}")
 
                                 equipes.append(equipe)
-                            
-                            vertice.add_equipes(equipes)
 
+                            vertice.add_equipes(equipes)
+                            
+                            #atribuindo sequencialmente equipes aos seus respectivos caminhões
+                            for equipe, caminhao in zip(vertice.equipes, vertice.caminhoes):
+                                equipe.ocupado = True
+                                equipe.caminhao = caminhao
+                                caminhao.equipe = equipe
+                            
                             print(vertice.nome)
                             for e in vertice.equipes:
-                                print(e)
+
+                                print(e.nome)
+                                print(e.ocupado)
+                                print(f"{e.caminhao.nome} \n")
                     
                     print("equipes de brigadas inicializadas \n")
                     
