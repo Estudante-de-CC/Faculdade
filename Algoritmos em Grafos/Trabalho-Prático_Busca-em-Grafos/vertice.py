@@ -1,5 +1,3 @@
-##Classes básicas relacionadas aos vértices usadas dentro do programa geral.
-
 from math import inf
 
 class vertice: 
@@ -106,6 +104,8 @@ class vegetacao(vertice):
                 self.qtdVizinhosVegetacao += 1
         
             adj_temp = adj_temp.next
+        
+        self.qtdVizinhosVegetacao -= 1
 
 class coleta(vertice): 
     def __init__(self,tipo: chr, nome: str, pos: int):

@@ -31,6 +31,3 @@
 
 #quantidade de equipes por posto de brigada
 3
-
-#vertice inicial do incêndio
-2

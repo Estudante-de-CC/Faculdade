@@ -1,9 +1,7 @@
-##Atividades gerais do programa relacionadas ao comportamento do grafo
 import vertice as v
 import linkedlist as ar
 import random as r
 from math import inf
-## Aqui eu preciso definir como fazer a integração de tudo isso certinho...
 
 class grafo:
     def __init__(self):
@@ -13,6 +11,7 @@ class grafo:
         self.focos = []
         self.mat_custos = []
         self.qtd_brigadas = 0
+        self.capacidadeCaminhoes = 0
         self.focosAtendidos = []
         self.qtdFocosSalvos = 0
         self.focosQueimados = []
@@ -99,3 +98,32 @@ class grafo:
         
         for i in self.listas_adj: 
             i.Exibir_adj()
+    
+    def resetarAtributos(self, capacidadeCaminhao: int):
+        self.focos = []
+        self.focosAtendidos = []
+        self.qtdFocosSalvos = 0
+        self.focosQueimados = []
+        self.equipesMobilizadas = []
+        self.qtdAguaUtilizada = 0
+        self.reabastecimentos = 0
+
+        #resetar atributos dos caminhões das brigadas
+        for vertice in self.vertices:
+
+            #resetar atributos dos vértices de vegetacao
+            if(vertice.tipo == "v"):
+                vertice.fogo = False
+                vertice.color = "green"
+                vertice.qtdVizinhosIncendiados = 0
+                vertice.explorados = 0
+
+            if(vertice.tipo == "b"):
+                for caminhao in vertice.caminhoes:
+                    caminhao.a_atual = capacidadeCaminhao
+                    caminhao.n_pos(vertice)
+                    caminhao.status = "disponivel"
+                    caminhao.caminhoAoFoco = []
+                    caminhao.focoAtual = None
+
+

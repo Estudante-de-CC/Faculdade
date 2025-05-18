@@ -1,4 +1,3 @@
-#Leitura do arquivo com os parâmetros para execução do programa
 import grafos as gf
 import vertice as ver
 import random
@@ -55,8 +54,7 @@ def obterDados():
                             int(vertice)
                             G.insere_ver("v")
                     
-                    G.listar_Prop()
-                    print("vértices carregados \n")
+                    print("\nvértices carregados")
                 
                     i+=1
 
@@ -80,8 +78,7 @@ def obterDados():
 
                         i+=1
                     
-                    G.listar_Prop()
-                    print("arestas carregadas \n")
+                    print("\narestas carregadas \n")
                     i+=1
 
                 #obtendo caminhões
@@ -93,6 +90,8 @@ def obterDados():
 
                     qtd_caminhoes = int(conteudo[0])
                     capacidade_caminhao = int(conteudo[1])
+
+                    G.capacidadeCaminhoes = capacidade_caminhao
 
                     for v in G.vertices:
                         if(v.tipo=="b"):
@@ -110,11 +109,11 @@ def obterDados():
 
                             print(v.nome)
                             for c in v.caminhoes:
-                                print(f"vertice {c.posicao}: caminhao {c}")
+                                print(f"vertice {c.posicao.nome}: caminhao {c.nome}")
                                 print(f"    capacidade: {c.capacidade}")
                                 print(f"    água atual: {c.a_atual}")
                     
-                    print("caminhões carregados para brigadas \n")
+                    print("\ncaminhões carregados para brigadas \n")
                     i+=1
 
                 #obtendo qtd de equipes por posto de brigada
@@ -152,37 +151,6 @@ def obterDados():
                     
                     i+=1
 
-                #obtendo foco inicial do incêndio
-                elif("vertice inicial" in parametro):
-                    
-                    focoInicial = int(linhas[i].strip())
-
-                    G.focos.append(focoInicial)
-                    print(f"incêndio inicia em: {G.focos[0]}")
-
-                    print("origem do incêndio inicializado \n")
-
-                    #gerando material inflamável para os vértices de vegetação criados
-
-                    #qtdMaterial inflamável atribuida aleatoriamente com base em limites
-                    #superior e inferior projetados com base no min e max de turnos desejados
-                    minTurnos = 1
-                    maxTurnos = 3
-
-                    limiteSuperior = capacidade_caminhao // minTurnos
-                    limiteInferior = capacidade_caminhao // maxTurnos
-
-                    for vertice in G.vertices:
-                        if(vertice.tipo == "v"):
-                            vertice.qtdMaterialInflamavel = random.randint(limiteInferior, limiteSuperior)
-                            print(f"{vertice.nome} -> qtdMaterial: {vertice.qtdMaterialInflamavel}")
-
-                    #contabilizando vertices de vegetação
-                    for vertice in G.vertices:
-                            if vertice.tipo == "v":
-                                G.vertices[vertice.pos].contabilizarVegetacao(G)
-
-                
                 else:
                     i+=1
             
@@ -190,3 +158,35 @@ def obterDados():
                 i+=1
     
     return G
+
+def inicializandoFoco(G, foco: int, capacidade_caminhao: int):
+
+    print("\nfoco inicial atribuído")
+
+    print("iniciando alocação de material inflamável\n")
+
+    G.focos.append(foco)
+
+    #gerando material inflamável para os vértices de vegetação criados
+
+    #qtdMaterial inflamável atribuida aleatoriamente com base em limites
+    #superior e inferior projetados com base no min e max de turnos desejados
+    minTurnos = 1
+    maxTurnos = 3
+
+    limiteSuperior = capacidade_caminhao // minTurnos
+    limiteInferior = capacidade_caminhao // maxTurnos
+
+    print(f"vegetação {G.vertices[foco].nome}: \n")
+
+    for vertice in G.vertices:
+        if(vertice.tipo == "v"):
+            vertice.qtdMaterialInflamavel = random.randint(limiteInferior, limiteSuperior)
+            print(f"{vertice.nome} -> qtdMaterial: {vertice.qtdMaterialInflamavel}")
+    
+    print("\nqtd de material inflamável atribuídas as vegetações\n")
+
+    #contabilizando vertices de vegetação
+    for vertice in G.vertices:
+        if vertice.tipo == "v":
+            G.vertices[vertice.pos].contabilizarVegetacao(G)
